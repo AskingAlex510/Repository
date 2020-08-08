@@ -45,5 +45,60 @@ public class MyTest {
 	        e.printStackTrace();
     }
 }
+	//test method identifier
+	@Test
+	public void test2() throws IOException {
 
+		try{
+			URL url = new URL(TestConfig.URL+"students");
+			HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+			String line = "";
+			StringBuilder stringBuilder = new StringBuilder();
+
+			while((line = bufferedReader.readLine()) !=null){
+				stringBuilder.append(line);
+			}
+
+			Gson gson = new Gson();
+			String json = stringBuilder.toString();
+			List<Student> students = gson.fromJson(json, new TypeToken<List<Student>>(){}.getType());
+			//String s = stringBuilder.toString();
+			//Matches the value of student 0 to Thanh
+			Assert.assertEquals(students.get(0).getAddress(), "testaddress");
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	//test method identifier
+	@Test
+	public void test3() throws IOException {
+
+		try{
+			URL url = new URL(TestConfig.URL+"students");
+			HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+			String line = "";
+			StringBuilder stringBuilder = new StringBuilder();
+
+			while((line = bufferedReader.readLine()) !=null){
+				stringBuilder.append(line);
+			}
+
+			Gson gson = new Gson();
+			String json = stringBuilder.toString();
+			List<Student> students = gson.fromJson(json, new TypeToken<List<Student>>(){}.getType());
+			//String s = stringBuilder.toString();
+			//Matches the value of student 0 to Thanh
+			Assert.assertEquals(students.get(0).getContact(), "testcontact");
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
