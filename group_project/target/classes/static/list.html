@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="listStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+
+
+<body style="background-color: cornflowerblue">
+<!-- Body container -->
+<div class="container-fluid" >
+    <!--  Adding container-->
+    <div class="container">
+        <div class="container" style="text-align: center; background-color: aliceblue; border-radius: 5px" >
+            <h2>Add Customer Name</h2>
+            Name: <input type="text" id="name"/>
+            <br>
+            <br>
+            Address: <input type="text" id="address"/>
+            <br>
+            <br>
+            Contact: <input type="text" id="contact"/>
+            <br>
+            <br>
+            <button id="buttonStyle" onclick="add()">Add</button>
+        </div>
+    <br>
+        <br>
+    <div class="container" style="text-align:center; background-color: chartreuse ; border-radius: 5px">
+        <h2>List of customers</h2>
+        <div class="row" id="studentList"></div>
+    </div>
+
+
+        <h2>List of teachers</h2>
+        <div  id="teacherList">
+
+        </div>
+    </div>
+
+</div>
+</body>
+
+<script>
+
+    getStudents()
+
+
+    function add() { //post
+
+        var name = document.getElementById('name').value //get value from an html element
+        var address = document.getElementById('address').value
+        var contact = document.getElementById('contact').value
+
+        fetch('http://localhost:8080/students', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({name: name, address:address,contact:contact})
+
+        }).then(res => getStudents())
+
+
+        console.log('Added')
+    }
+
+    function getStudents() {
+
+        var studentList = document.getElementById('studentList')
+
+        studentList.innerHTML = ''
+
+        fetch('http://localhost:8080/students')
+            .then(res => res.json())
+            .then(json => {
+
+                for (i = 0; i < json.length; i++) {
+
+                    var id = json[i].id
+
+                    var deleteLink = `<button id="buttonStyle" onclick='deleteStudent(${id})'>Delete</button>`
+
+                    studentList.innerHTML += '<div class="col-md-4">' + json[i].name + '|' +json[i].address + deleteLink + '</div>'
+
+                }
+
+            })
+
+    }
+
+
+    function deleteStudent(id) {
+        fetch('http://localhost:8080/students/' + id, {
+            method: 'delete'
+        })
+            .then(res => getStudents())
+    }
+
+
+
+
+</script>
